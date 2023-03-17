@@ -2,17 +2,23 @@
   // imports
   import { readContract, prepareWriteContract, writeContract } from "@wagmi/core";
   import { fooABI, fooAddress } from "../generated";
+  import { barABI, barAddress } from "../generated";
   import { foundry } from "@wagmi/core/chains";
+  import { providers } from "../stores";
+  import { onMount } from "svelte";
 
   // variables
   let inputMessage = "";
   let messageFromContract = "";
 
+  //console.log($providers[foundry.id].getBalance("0x5019c692E5f77B6294BFaCd6f8A615809EC44b94"));
+  //console.log($providers[foundry.id].getBalance("0x5019c692E5f77B6294BFaCd6f8A615809EC44b94"));
+
   // functions
   async function readMessage() {
     const data = await readContract({
-      address: fooAddress[foundry.id],
-      abi: fooABI,
+      address: barAddress[foundry.id],
+      abi: barABI,
       functionName: "myString",
     });
     messageFromContract = data;
@@ -20,14 +26,29 @@
 
   async function writeMessage() {
     const config = await prepareWriteContract({
-      address: fooAddress[foundry.id],
-      abi: fooABI,
+      address: barAddress[foundry.id],
+      abi: barABI,
       functionName: "setMyString",
       args: [inputMessage],
     });
     await writeContract(config);
     readMessage();
   }
+
+  async function getBalance() {
+	const balance = await $providers[foundry.id].getBalance(
+		"0x5019c692E5f77B6294BFaCd6f8A615809EC44b94"
+	);
+	console.log(balance.toString());
+	const ethBalance = balance/1000000000000000000;
+	console.log(ethBalance);
+  }
+
+  onMount(() => {
+	getBalance();
+	});
+
+
 </script>
 
 <section>Note: Must be connected to local foundry (anvil) network.</section>

@@ -3,6 +3,9 @@ import { foundry } from "@wagmi/cli/plugins";
 import * as wagmiChains from "@wagmi/core/chains";
 import { base, taiko } from "./src/domain/chain";
 import foundryJson from "../contracts/broadcast/Deploy.s.sol/31337/run-latest.json";
+import barJson from "../contracts/broadcast/Deploy.s.sol/31337/run-latest.json";
+// import foundryJson from "../contracts/broadcast/Deploy.s.sol/167002/run-latest.json";
+// import barJson from "../contracts/broadcast/Deploy.s.sol/167002/run-latest.json";
 import { headerSyncABI, signalServiceABI } from "./src/abi";
 import { Abi } from "abitype";
 
@@ -35,6 +38,11 @@ export default defineConfig({
           // OR
           // [chains.foundry.id]: "0xblahblahblah"
         },
+
+	Bar: {
+	  [chains.foundry.id]: barJson.transactions[1].contractAddress as `0x${string}`,
+	}, 
+
       },
       project: "../../",
     }),
